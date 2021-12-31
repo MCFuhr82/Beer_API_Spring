@@ -90,7 +90,7 @@ public class BeerControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
+    //    @Test
 //    void whenPATCHIsCalledToIncrementGreatherThanMaxThenBadRequestStatusIsReturned() throws Exception {
 //        QuantityDTO quantityDTO = QuantityDTO.builder()
 //                .quantity(30)
