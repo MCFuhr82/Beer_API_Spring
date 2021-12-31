@@ -1,4 +1,6 @@
-<h2>Desenvolvimento de testes unitários para validar uma API REST de gerenciamento de estoques de cerveja.</h2>
+<h1>Desenvolvimento de testes unitários para validar uma API REST de gerenciamento de estoques de cerveja.</h1>
+
+### Projeto de estudo com base no livecoding do professor Rodrigo Peleias, da Digital Innovation One. 
 
 Neste projeto, vamos aprender a testar, unitariamente, uma API REST para o gerenciamento de estoques de cerveja, desenvolvendo testes unitários para validar o sistema de gerenciamento de estoques de cerveja. 
 
@@ -28,7 +30,7 @@ Após executar o comando acima, basta apenas abrir o seguinte endereço e visual
 http://localhost:8080/api/v1/beers
 ```
 
-Projeto de estudo com base no livecoding do professor Rodrigo Peleias, da Digital Innovation One.
+
 
 
 
