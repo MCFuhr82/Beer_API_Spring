@@ -10,13 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerServiceTest {
@@ -34,18 +35,19 @@ public class BeerServiceTest {
     @Test
     void quandoCervejaInformadaEntaoDeveSerCriada() throws BeerAlreadyRegisteredException {
         // given
-        BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-        Beer cervejaSalvaEsperada = beerMapper.toModel(beerDTO);
+        BeerDTO cervejaEsperadaDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer cervejaSalvaEsperada = beerMapper.toModel(cervejaEsperadaDTO);
 
         //when
-        when(beerRepository.findByName(beerDTO.getName())).thenReturn(Optional.empty());
+        when(beerRepository.findByName(cervejaEsperadaDTO.getName())).thenReturn(Optional.empty());
         when(beerRepository.save(cervejaSalvaEsperada)).thenReturn(cervejaSalvaEsperada);
 
         //then
-        BeerDTO cervejaCriadaDTO = beerService.createBeer(beerDTO);
+        BeerDTO cervejaCriadaDTO = beerService.createBeer(cervejaEsperadaDTO);
 
-        assertEquals(beerDTO.getId(), cervejaCriadaDTO.getId());
-        assertEquals(beerDTO.getName(), cervejaCriadaDTO.getName());
+        assertThat(cervejaCriadaDTO.getId(), is(equalTo(cervejaCriadaDTO.getId())));
+        assertThat(cervejaCriadaDTO.getName(), is(equalTo(cervejaCriadaDTO.getName())));
+        assertThat(cervejaCriadaDTO.getQuantity(), is(equalTo(cervejaCriadaDTO.getQuantity())));
     }
 
 //
