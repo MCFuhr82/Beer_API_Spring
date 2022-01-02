@@ -60,7 +60,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void quandoChamadoPostEntaoCervejaCriada() throws Exception {
+    void quandoChamadoPOSTEntaoCervejaCriada() throws Exception {
         //given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -78,7 +78,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void quandoChamadoPostSemCampoObrigatorioEntaoErroRetornado() throws Exception {
+    void quandoChamadoPOSTSemCampoObrigatorioEntaoErroRetornado() throws Exception {
         //given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         beerDTO.setBrand(null);
