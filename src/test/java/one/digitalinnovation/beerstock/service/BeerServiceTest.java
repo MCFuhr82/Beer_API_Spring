@@ -13,11 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +94,23 @@ public class BeerServiceTest {
         assertThrows(BeerNotFoundException.class, () -> beerService.findByName(cervejaEncontradaEsperadaDTO.getName()));
     }
 
-//
+    @Test
+    void quandoUmaListaEChamadaEntaoRetornarUmaListaDeCerveja() {
+        //given
+        BeerDTO cervejaEncontradaEsperadaDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer cervejaEncontradaEsperada = beerMapper.toModel(cervejaEncontradaEsperadaDTO);
+
+        //when
+        when(beerRepository.findAll()).thenReturn(Collections.singletonList(cervejaEncontradaEsperada));
+
+        //then
+        List<BeerDTO> encontradaListaCervejasDTO = beerService.listAll();
+
+        assertThat(encontradaListaCervejasDTO, is(not(empty())));
+        assertThat(encontradaListaCervejasDTO.get(0), is(equalTo(cervejaEncontradaEsperadaDTO)));
+    }
+
+    //
 //    @Test
 //    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
 //        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
