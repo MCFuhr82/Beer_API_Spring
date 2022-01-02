@@ -110,6 +110,17 @@ public class BeerServiceTest {
         assertThat(encontradaListaCervejasDTO.get(0), is(equalTo(cervejaEncontradaEsperadaDTO)));
     }
 
+    @Test
+    void quandoUmaListaDeCervejaEChamadaEntaoRetornarUmaListaVazia() {
+        //when
+        when(beerRepository.findAll()).thenReturn(Collections.emptyList());
+
+        //then
+        List<BeerDTO> encontradaListaCervejasDTO = beerService.listAll();
+
+        assertThat(encontradaListaCervejasDTO, is(empty()));
+    }
+
     //
 //    @Test
 //    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
