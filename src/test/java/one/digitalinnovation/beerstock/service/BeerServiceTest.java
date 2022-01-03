@@ -5,6 +5,7 @@ import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
+import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
 import one.digitalinnovation.beerstock.mapper.BeerMapper;
 import one.digitalinnovation.beerstock.repository.BeerRepository;
 import org.junit.jupiter.api.Test;
@@ -136,6 +137,26 @@ public class BeerServiceTest {
 
         verify(beerRepository, times(1)).findById(cervejaDeletadaEsperadaDTO.getId());
         verify(beerRepository, times(1)).deleteById(cervejaDeletadaEsperadaDTO.getId());
+    }
+
+    @Test
+    void quandoIncrementoEChamadoEntaoIncrementarEstoqueDeCerveja() throws BeerNotFoundException, BeerStockExceededException {
+        //given
+        BeerDTO cervejaEncontradaEsperadaDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer cervejaEncontradaEsperada = beerMapper.toModel(cervejaEncontradaEsperadaDTO);
+
+        //when
+        when(beerRepository.findById(cervejaEncontradaEsperada.getId())).thenReturn(Optional.of(cervejaEncontradaEsperada));
+        when(beerRepository.save(cervejaEncontradaEsperada)).thenReturn(cervejaEncontradaEsperada);
+
+        int quantidadeParaIncrementar = 10;
+        int quantidadeEsperadaDepoisDoIncremento = cervejaEncontradaEsperadaDTO.getQuantity() + quantidadeParaIncrementar;
+
+        //then
+        BeerDTO cervejaEncontradaDTO = beerService.increment(cervejaEncontradaEsperadaDTO.getId(), quantidadeParaIncrementar);
+
+        assertThat(quantidadeEsperadaDepoisDoIncremento, equalTo(cervejaEncontradaDTO.getQuantity()));
+        assertThat(quantidadeEsperadaDepoisDoIncremento, lessThan(cervejaEncontradaDTO.getMax()));
     }
 
     //
