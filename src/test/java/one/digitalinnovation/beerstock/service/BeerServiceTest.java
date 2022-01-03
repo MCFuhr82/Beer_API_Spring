@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerServiceTest {
@@ -119,6 +119,23 @@ public class BeerServiceTest {
         List<BeerDTO> encontradaListaCervejasDTO = beerService.listAll();
 
         assertThat(encontradaListaCervejasDTO, is(empty()));
+    }
+
+    @Test
+    void quandoUmaExclusaoEChamadaComIdValidoEntaoACervejaDeveSerDeletada() throws BeerNotFoundException {
+        //given
+        BeerDTO cervejaDeletadaEsperadaDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer cervejaDeletadaEsperada = beerMapper.toModel(cervejaDeletadaEsperadaDTO);
+
+        //when
+        when(beerRepository.findById(cervejaDeletadaEsperadaDTO.getId())).thenReturn(Optional.of(cervejaDeletadaEsperada));
+        doNothing().when(beerRepository).deleteById(cervejaDeletadaEsperadaDTO.getId());
+
+        //then
+        beerService.deleteById(cervejaDeletadaEsperadaDTO.getId());
+
+        verify(beerRepository, times(1)).findById(cervejaDeletadaEsperadaDTO.getId());
+        verify(beerRepository, times(1)).deleteById(cervejaDeletadaEsperadaDTO.getId());
     }
 
     //
