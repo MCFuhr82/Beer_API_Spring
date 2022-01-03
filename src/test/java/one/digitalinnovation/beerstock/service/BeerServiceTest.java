@@ -159,6 +159,21 @@ public class BeerServiceTest {
         assertThat(quantidadeEsperadaDepoisDoIncremento, lessThan(cervejaEncontradaDTO.getMax()));
     }
 
+    @Test
+    void quandoIncrementoEMaiorQueOMaximoEntaoExcecaoELancada() throws BeerNotFoundException, BeerStockExceededException {
+        //given
+        BeerDTO cervejaEncontradaEsperadaDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer cervejaEncontradaEsperada = beerMapper.toModel(cervejaEncontradaEsperadaDTO);
+
+        //when
+        when(beerRepository.findById(cervejaEncontradaEsperada.getId())).thenReturn(Optional.of(cervejaEncontradaEsperada));
+
+        int quantidadeParaIncrementar = 80;
+
+        //then
+        assertThrows(BeerStockExceededException.class, () -> beerService.increment(cervejaEncontradaEsperadaDTO.getId(), quantidadeParaIncrementar));
+    }
+
     //
 //    @Test
 //    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
